@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     userLoginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const phoneNumber = document.getElementById('user-phone').value;
-        const response = await fetch('http://localhost:5000/api/login', {
+        const response = await fetch('https://campus-bites-backend.onrender.com/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phoneNumber })
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         e.preventDefault();
         const username = document.getElementById('admin-username').value;
         const password = document.getElementById('admin-password').value;
-        const response = await fetch('http://localhost:5000/api/login', {
+        const response = await fetch('https://campus-bites-backend.onrender.com/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function initializePage() {
         try {
-            const response = await fetch('http://localhost:5000/api/food-items');
+            const response = await fetch('https://campus-bites-backend.onrender.com/api/food-items');
             const dbItems = await response.json();
             
             allFoodItems = [...staticFoodItems, ...dbItems];
@@ -324,7 +324,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const amountInPaise = totalAmount * 100;
 
         try {
-            const backendResponse = await fetch('http://localhost:5000/api/create-order', {
+            const backendResponse = await fetch('https://campus-bites-backend.onrender.com/api/create-order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
@@ -434,7 +434,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const interval = setInterval(async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/order-status/${orderId}`);
+                const response = await fetch(`https://campus-bites-backend.onrender.com/api/order-status/${orderId}`);
                 const order = await response.json();
                 if (order && order.status) {
                     updateUI(order.status);
@@ -447,5 +447,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }, 5000); // Poll every 5 seconds
     }
+
 
 }); // The final closing bracket of the DOMContentLoaded event listener.The issue is in the payment button it is still showing payment failed when I am trying to make a payment can you fix it please.
