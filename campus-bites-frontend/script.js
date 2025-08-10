@@ -45,76 +45,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const checkoutBar = document.getElementById('checkout-bar');
     const tabs = document.querySelectorAll('.tab-button');
     const dailySpecialBanner = document.getElementById('daily-special-banner');
-    // Add this to your DOM Elements section
     const orderTrackingModal = document.getElementById('order-tracking-modal');
     const trackOrderId = document.getElementById('track-order-id');
     const trackingSteps = document.querySelectorAll('.tracking-steps .step');
     
-    // Check for Razorpay key in .env or hardcode if not available
-    const razorpayKey = 'rzp_test_0eyJw3lqLbAHb9'; 
+    const razorpayKey = 'rzp_test_0eyJw3lqLbAHb9';
     const payWithRazorpayButton = document.getElementById('pay-and-place-order');
-
-    // Check login status on page load
-    const userRole = localStorage.getItem('role');
-    if (userRole === 'user') {
-        loginModal.style.display = 'none';
-        initializePage();
-    } else if (userRole === 'admin') {
-        window.location.href = 'admin.html';
-    } else {
-        loginModal.style.display = 'block';
-    }
-
-    // Login event listeners
-    userLoginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const phoneNumber = document.getElementById('user-phone').value;
-        const response = await fetch('https://campus-bites-backend.onrender.com/api/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phoneNumber })
-        });
-        const data = await response.json();
-        if (data.role === 'user') {
-            localStorage.setItem('role', 'user');
-            localStorage.setItem('userId', data.userId);
-            localStorage.setItem('userPhone', phoneNumber);
-            loginModal.style.display = 'none';
-            await initializePage();
-        } else {
-            alert('Login failed. Please try again.');
-        }
-    });
-
-    adminLoginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const username = document.getElementById('admin-username').value;
-        const password = document.getElementById('admin-password').value;
-        const response = await fetch('https://campus-bites-backend.onrender.com/api/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-        });
-        const data = await response.json();
-        if (data.role === 'admin') {
-            localStorage.setItem('role', 'admin');
-            window.location.href = 'admin.html'; // Redirect to admin page
-        } else {
-            alert('Admin login failed. Invalid credentials.');
-        }
-    });
-
-    showAdminLoginBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        userLoginForm.style.display = 'none';
-        adminLoginForm.style.display = 'block';
-    });
-
-    showUserLoginBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        adminLoginForm.style.display = 'none';
-        userLoginForm.style.display = 'block';
-    });
 
     async function initializePage() {
         try {
@@ -123,7 +59,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             allFoodItems = [...staticFoodItems, ...dbItems];
             
-            // Re-map IDs for dynamic items to avoid conflicts with static items
             const newIdStart = staticFoodItems.length + 1;
             allFoodItems = allFoodItems.map((item, index) => ({
                 ...item,
@@ -146,7 +81,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Render food items
     function renderFoodItems(category = 'All', searchTerm = '') {
         let filteredItems = category === 'All' ? allFoodItems : allFoodItems.filter(item => item.category === category);
         
@@ -178,7 +112,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // Add item to cart
     function addItemToCart(itemId) {
         const item = allFoodItems.find(i => i.id === itemId);
         if (item && !item.isSoldOut) {
@@ -191,7 +124,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
     
-    // Remove item from cart (decrements quantity)
     function removeItemFromCart(itemId) {
         if (cart[itemId]) {
             cart[itemId].quantity--;
@@ -202,7 +134,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Update cart UI
     function updateCartUI() {
         const subtotalPriceSpan = document.getElementById('subtotal-price');
         const checkoutText = document.getElementById('checkout-text');
@@ -248,7 +179,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('pay-button-amount').textContent = `₹ ${subtotal}`;
     }
 
-    // Event Listeners
     foodGrid.addEventListener('click', (e) => {
         if (e.target.classList.contains('add-button')) {
             const itemId = e.target.dataset.id;
@@ -256,7 +186,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
     
-    // Listener for plus and minus buttons in the cart modal
     cartItemsContainer.addEventListener('click', (e) => {
         if (e.target.classList.contains('add-to-cart')) {
             const itemId = e.target.dataset.id;
@@ -276,7 +205,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // Search bar event listener
     searchBar.addEventListener('input', (e) => {
         const searchTerm = e.target.value;
         const activeTab = document.querySelector('.tab-button.active').textContent;
@@ -307,7 +235,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateOrderSummary();
     });
 
-    // Razorpay Integration
     payWithRazorpayButton.addEventListener('click', async (e) => {
         e.preventDefault(); 
 
@@ -354,7 +281,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     document.getElementById('confirmation-message').innerHTML = `Thanks ${name}, your order ${orderId} is received. Please head to the canteen pickup counter.`;
                     document.getElementById('notification-message').innerHTML = `Thanks ${name}. Your order ${orderId} is being prepared.`;
                     
-                    // Add a "Track My Order" button
                     const trackButton = document.createElement('button');
                     trackButton.textContent = 'Track My Order';
                     trackButton.classList.add('back-to-menu-button'); 
@@ -417,9 +343,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             orderSummaryItems.appendChild(div);
         }
     }
-    // Add the new trackOrderStatus function here
+
     async function trackOrderStatus(orderId) {
-        // This function will be called on a timer to fetch the latest status
         const updateUI = (status) => {
             const statuses = ['Received', 'Preparing', 'Ready', 'Completed'];
             const currentStepIndex = statuses.indexOf(status);
@@ -445,8 +370,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             } catch (error) {
                 console.error('Failed to fetch order status:', error);
             }
-        }, 5000); // Poll every 5 seconds
+        }, 5000);
     }
-
-
-}); // The final closing bracket of the DOMContentLoaded event listener.The issue is in the payment button it is still showing payment failed when I am trying to make a payment can you fix it please.
+});
