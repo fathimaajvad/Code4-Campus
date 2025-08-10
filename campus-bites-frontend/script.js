@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const razorpayKey = 'rzp_test_0eyJw3lqLbAHb9';
     const payWithRazorpayButton = document.getElementById('pay-and-place-order');
 
+    // Function to initialize the main page content (gets menu, sets daily special)
     async function initializePage() {
         try {
             const response = await fetch('https://campus-bites-backend.onrender.com/api/food-items');
@@ -81,6 +82,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // Function to render food items
     function renderFoodItems(category = 'All', searchTerm = '') {
         let filteredItems = category === 'All' ? allFoodItems : allFoodItems.filter(item => item.category === category);
         
@@ -112,6 +114,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Function to add item to cart
     function addItemToCart(itemId) {
         const item = allFoodItems.find(i => i.id === itemId);
         if (item && !item.isSoldOut) {
@@ -124,6 +127,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
     
+    // Function to remove item from cart
     function removeItemFromCart(itemId) {
         if (cart[itemId]) {
             cart[itemId].quantity--;
@@ -134,6 +138,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // Function to update cart UI
     function updateCartUI() {
         const subtotalPriceSpan = document.getElementById('subtotal-price');
         const checkoutText = document.getElementById('checkout-text');
@@ -179,6 +184,111 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('pay-button-amount').textContent = `₹ ${subtotal}`;
     }
 
+    // Function to update order summary
+    function updateOrderSummary() {
+        const orderSummaryItems = document.getElementById('order-summary-items');
+        orderSummaryItems.innerHTML = '';
+        for (const itemId in cart) {
+            const item = cart[itemId];
+            const div = document.createElement('div');
+            div.innerHTML = `<p>${item.name} × ${item.quantity}</p>`;
+            orderSummaryItems.appendChild(div);
+        }
+    }
+
+    // Function to track order status
+    async function trackOrderStatus(orderId) {
+        const updateUI = (status) => {
+            const statuses = ['Received', 'Preparing', 'Ready', 'Completed'];
+            const currentStepIndex = statuses.indexOf(status);
+            trackingSteps.forEach((step, index) => {
+                if (index <= currentStepIndex) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+        };
+
+        const interval = setInterval(async () => {
+            try {
+                const response = await fetch(`https://campus-bites-backend.onrender.com/api/order-status/${orderId}`);
+                const order = await response.json();
+                if (order && order.status) {
+                    updateUI(order.status);
+                    if (order.status === 'Ready' || order.status === 'Completed') {
+                        clearInterval(interval);
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to fetch order status:', error);
+            }
+        }, 5000);
+    }
+    
+    // Check login status and set up event listeners on page load
+    const userRole = localStorage.getItem('role');
+    if (userRole === 'user') {
+        loginModal.style.display = 'none';
+        initializePage();
+    } else if (userRole === 'admin') {
+        window.location.href = 'admin.html';
+    } else {
+        loginModal.style.display = 'block';
+    }
+
+    // Event Listeners for Login Forms
+    userLoginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const phoneNumber = document.getElementById('user-phone').value;
+        const response = await fetch('https://campus-bites-backend.onrender.com/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phoneNumber })
+        });
+        const data = await response.json();
+        if (data.role === 'user') {
+            localStorage.setItem('role', 'user');
+            localStorage.setItem('userId', data.userId);
+            localStorage.setItem('userPhone', phoneNumber);
+            loginModal.style.display = 'none';
+            await initializePage();
+        } else {
+            alert('Login failed. Please try again.');
+        }
+    });
+
+    adminLoginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('admin-username').value;
+        const password = document.getElementById('admin-password').value;
+        const response = await fetch('https://campus-bites-backend.onrender.com/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+        const data = await response.json();
+        if (data.role === 'admin') {
+            localStorage.setItem('role', 'admin');
+            window.location.href = 'admin.html';
+        } else {
+            alert('Admin login failed. Invalid credentials.');
+        }
+    });
+
+    showAdminLoginBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        userLoginForm.style.display = 'none';
+        adminLoginForm.style.display = 'block';
+    });
+
+    showUserLoginBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        adminLoginForm.style.display = 'none';
+        userLoginForm.style.display = 'block';
+    });
+
+    // Event Listeners for User Interface
     foodGrid.addEventListener('click', (e) => {
         if (e.target.classList.contains('add-button')) {
             const itemId = e.target.dataset.id;
@@ -235,6 +345,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateOrderSummary();
     });
 
+    // Razorpay Integration
     payWithRazorpayButton.addEventListener('click', async (e) => {
         e.preventDefault(); 
 
@@ -332,44 +443,4 @@ document.addEventListener('DOMContentLoaded', async () => {
             renderFoodItems(category);
         });
     });
-
-    function updateOrderSummary() {
-        const orderSummaryItems = document.getElementById('order-summary-items');
-        orderSummaryItems.innerHTML = '';
-        for (const itemId in cart) {
-            const item = cart[itemId];
-            const div = document.createElement('div');
-            div.innerHTML = `<p>${item.name} × ${item.quantity}</p>`;
-            orderSummaryItems.appendChild(div);
-        }
-    }
-
-    async function trackOrderStatus(orderId) {
-        const updateUI = (status) => {
-            const statuses = ['Received', 'Preparing', 'Ready', 'Completed'];
-            const currentStepIndex = statuses.indexOf(status);
-            trackingSteps.forEach((step, index) => {
-                if (index <= currentStepIndex) {
-                    step.classList.add('active');
-                } else {
-                    step.classList.remove('active');
-                }
-            });
-        };
-
-        const interval = setInterval(async () => {
-            try {
-                const response = await fetch(`https://campus-bites-backend.onrender.com/api/order-status/${orderId}`);
-                const order = await response.json();
-                if (order && order.status) {
-                    updateUI(order.status);
-                    if (order.status === 'Ready' || order.status === 'Completed') {
-                        clearInterval(interval);
-                    }
-                }
-            } catch (error) {
-                console.error('Failed to fetch order status:', error);
-            }
-        }, 5000);
-    }
 });
