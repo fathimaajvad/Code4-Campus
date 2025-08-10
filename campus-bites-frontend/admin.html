@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Bites Admin</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: var(--secondary-color);
+            padding: 20px;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .admin-section {
+            margin-bottom: 3rem;
+        }
+
+        .admin-section h2 {
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        #food-item-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        #food-item-form input,
+        #food-item-form select {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        #food-item-form button {
+            grid-column: span 2;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        #food-item-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .admin-food-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f9f9f9;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .admin-food-item.sold-out {
+            opacity: 0.5;
+            background-color: #fdd;
+        }
+
+        .admin-food-item-info {
+            flex-grow: 1;
+        }
+
+        .admin-food-item-info h3 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .admin-food-item-info p {
+            margin: 0;
+            color: #555;
+        }
+
+        .admin-actions button {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .admin-actions .delete-button {
+            background-color: #ff4d4d;
+            color: #fff;
+            border: none;
+        }
+
+        .admin-actions .sold-out-button.active {
+            background-color: orange;
+            color: #fff;
+        }
+
+        .admin-actions .special-button.active {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+        
+        /* New CSS for Order Items */
+        .admin-order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f9f9f9;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .admin-order-item .order-info h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+
+        .admin-order-item .order-info p {
+            margin: 0.2rem 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .admin-order-item .order-status-text {
+            font-weight: 600;
+        }
+
+        .admin-order-item .order-actions .status-btn {
+            background: #eee;
+            color: #333;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .admin-order-item .order-actions .status-btn[data-status="Preparing"] {
+            background: #ffc107;
+            color: white;
+        }
+        .admin-order-item .order-actions .status-btn[data-status="Ready"] {
+            background: #28a745;
+            color: white;
+        }
+        .admin-order-item .order-actions .status-btn[data-status="Completed"] {
+            background: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h1>Admin Dashboard</h1>
+        <div class="admin-section">
+            <h2>Add New Food Item</h2>
+            <form id="food-item-form">
+                <input type="text" id="name" placeholder="Name" required>
+                <input type="number" id="price" placeholder="Price" required>
+                <input type="text" id="image" placeholder="Image Filename" required>
+                <select id="category" required>
+                    <option value="" disabled selected>Select Category</option>
+                    <option value="Snacks">Snacks</option>
+                    <option value="South Indian">South Indian</option>
+                    <option value="Beverages">Beverages</option>
+                    <option value="Popular">Popular</option>
+                    <option value="All">All</option>
+                </select>
+                <button type="submit">Add Item</button>
+            </form>
+        </div>
+
+        <div class="admin-section">
+            <h2>Current Menu & Actions</h2>
+            <div id="food-item-list">
+            </div>
+        </div>
+        <div class="admin-section">
+            <h2>Live Orders</h2>
+            <div id="live-orders-list">
+                <p>No new orders.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const form = document.getElementById('food-item-form');
+            const foodItemList = document.getElementById('food-item-list');
+            const liveOrdersList = document.getElementById('live-orders-list');
+
+            // Initial fetch and render of food items
+            async function fetchAndRenderItems() {
+                const response = await fetch('http://localhost:5000/api/food-items');
+                const items = await response.json();
+                renderItems(items);
+            }
+
+            function renderItems(items) {
+                foodItemList.innerHTML = '';
+                items.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.classList.add('admin-food-item');
+                    if (item.isSoldOut) {
+                        itemDiv.classList.add('sold-out');
+                    }
+                    const specialBtnClass = item.isDailySpecial ? 'special-button active' : 'special-button';
+                    const soldOutBtnClass = item.isSoldOut ? 'sold-out-button active' : 'sold-out-button';
+
+                    itemDiv.innerHTML = `
+                        <div class="admin-food-item-info">
+                            <h3>${item.name}</h3>
+                            <p>₹ ${item.price} • ${item.category}</p>
+                        </div>
+                        <div class="admin-actions">
+                            <button class="${specialBtnClass}" data-id="${item._id}">${item.isDailySpecial ? 'Special ✅' : 'Set as Special'}</button>
+                            <button class="${soldOutBtnClass}" data-id="${item._id}">${item.isSoldOut ? 'Sold Out ✅' : 'Mark Sold Out'}</button>
+                            <button class="delete-button" data-id="${item._id}">Delete</button>
+                        </div>
+                    `;
+                    foodItemList.appendChild(itemDiv);
+                });
+            }
+
+            // Event listener for adding new items
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const newItem = {
+                    name: document.getElementById('name').value,
+                    price: document.getElementById('price').value,
+                    image: document.getElementById('image').value,
+                    category: document.getElementById('category').value,
+                };
+                await fetch('http://localhost:5000/api/add-item', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newItem),
+                });
+                form.reset();
+                fetchAndRenderItems(); // Refresh the list
+            });
+
+            // Event listener for item actions (delete, sold out, special)
+            foodItemList.addEventListener('click', async (e) => {
+                const itemId = e.target.dataset.id;
+                if (!itemId) return;
+
+                if (e.target.classList.contains('delete-button')) {
+                    await fetch(`http://localhost:5000/api/delete-item/${itemId}`, { method: 'DELETE' });
+                } else if (e.target.classList.contains('sold-out-button')) {
+                    const isSoldOut = e.target.classList.contains('active');
+                    await fetch(`http://localhost:5000/api/update-item/${itemId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ isSoldOut: !isSoldOut })
+                    });
+                } else if (e.target.classList.contains('special-button')) {
+                    await fetch(`http://localhost:5000/api/set-daily-special/${itemId}`, { method: 'PUT' });
+                }
+                fetchAndRenderItems(); // Refresh the list after any action
+            });
+
+            // NEW FUNCTIONS AND EVENT LISTENER FOR LIVE ORDERS
+            async function fetchAndRenderOrders() {
+                try {
+                    const response = await fetch('http://localhost:5000/api/orders');
+                    const orders = await response.json();
+                    renderOrders(orders);
+                } catch (err) {
+                    console.error('Failed to fetch orders:', err);
+                    liveOrdersList.innerHTML = '<p>Error fetching orders.</p>';
+                }
+            }
+
+            function renderOrders(orders) {
+                liveOrdersList.innerHTML = '';
+                if (orders.length === 0) {
+                    liveOrdersList.innerHTML = '<p>No new orders.</p>';
+                    return;
+                }
+                orders.forEach(order => {
+                    const orderDiv = document.createElement('div');
+                    orderDiv.classList.add('admin-order-item');
+                    let itemsList = order.items.map(item => `${item.name} x ${item.quantity}`).join(', ');
+                    orderDiv.innerHTML = `
+                        <div class="order-info">
+                            <h3>Order ID: ${order.orderId}</h3>
+                            <p>Items: ${itemsList}</p>
+                            <p>Status: <span class="order-status-text">${order.status}</span></p>
+                        </div>
+                        <div class="order-actions">
+                            <button class="status-btn" data-id="${order.orderId}" data-status="Preparing">Preparing</button>
+                            <button class="status-btn" data-id="${order.orderId}" data-status="Ready">Ready</button>
+                            <button class="status-btn" data-id="${order.orderId}" data-status="Completed">Completed</button>
+                        </div>
+                    `;
+                    liveOrdersList.appendChild(orderDiv);
+                });
+            }
+
+            liveOrdersList.addEventListener('click', async (e) => {
+                if (e.target.classList.contains('status-btn')) {
+                    const orderId = e.target.dataset.id;
+                    const newStatus = e.target.dataset.status;
+
+                    await fetch(`http://localhost:5000/api/admin/update-order-status/${orderId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: newStatus }),
+                    });
+
+                    fetchAndRenderOrders();
+                }
+            });
+
+            // Initial calls to populate the dashboard
+            fetchAndRenderItems();
+            fetchAndRenderOrders();
+        });
+    </script>
+</body>
+</html>

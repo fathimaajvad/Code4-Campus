@@ -1,0 +1,502 @@
+:root {
+    --primary-color: #8A2BE2; /* A vibrant purple */
+    --secondary-color: #f7f7f7;
+    --card-background: #ffffff;
+    --text-color: #333;
+    --border-radius: 12px;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--secondary-color);
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+}
+
+.main-header {
+    background-color: #ffffff;
+    box-shadow: var(--box-shadow);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.search-bar-container {
+    flex-grow: 1;
+    margin: 0 2rem;
+    position: relative;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.search-bar:focus {
+    border-color: var(--primary-color);
+}
+
+.cart-icon-container {
+    position: relative;
+    cursor: pointer;
+    background: var(--primary-color);
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+.cart-icon {
+    font-size: 1.2rem;
+    margin-right: 8px;
+}
+
+.cart-count {
+    font-size: 1rem;
+}
+
+.daily-special-banner {
+    background: linear-gradient(90deg, #FF6F61, #DE4F6D);
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+    position: sticky;
+    top: 60px;
+    z-index: 999;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.fireworks {
+    animation: firework 1.5s ease-out infinite;
+    display: inline-block;
+    margin: 0 10px;
+}
+
+@keyframes firework {
+    0% { transform: scale(1) rotate(0deg); opacity: 1; }
+    50% { transform: scale(1.2) rotate(10deg); opacity: 0.8; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.main-content {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 20px;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.tab-button {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.tab-button:hover,
+.tab-button.active {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border-color: var(--primary-color);
+}
+
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.food-card {
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding-bottom: 50px; /* Add space for the sold out overlay */
+}
+
+.food-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.food-info {
+    padding: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.food-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.food-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.food-price {
+    font-size: 1rem;
+    color: #555;
+}
+
+.add-button {
+    background: linear-gradient(90deg, #8A2BE2, #A020F0);
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.2s;
+    position: absolute; /* Position the button */
+    bottom: 1.25rem;
+    right: 1.25rem;
+}
+
+.add-button:hover {
+    transform: scale(1.05);
+}
+
+.food-card.sold-out .add-button {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.food-card.sold-out::after {
+    content: 'Sold Out';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    pointer-events: none;
+}
+
+.checkout-bar {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1200px;
+    background: linear-gradient(90deg, #8A2BE2, #A020F0);
+    color: #ffffff;
+    padding: 1rem;
+    border-radius: 12px 12px 0 0;
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 999;
+}
+
+/* Modals */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    max-width: 450px;
+    position: relative;
+    box-shadow: var(--box-shadow);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.close-button {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cart-items-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+/* Reverted cart item style to original */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item-info {
+    flex-grow: 1;
+}
+
+.cart-item-name {
+    font-weight: 600;
+}
+
+.cart-item-price {
+    font-weight: 400;
+}
+/* This is the CSS for the plus/minus buttons */
+.cart-item-actions {
+    display: flex;
+    align-items: center;
+}
+
+.cart-item-actions button {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    line-height: 1;
+    margin: 0 4px;
+}
+.cart-footer {
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+    margin-top: 1rem;
+}
+
+.subtotal-container {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.checkout-button-modal {
+    width: 100%;
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 0.75rem;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+/* Checkout Modal */
+.checkout-modal-content {
+    max-width: 600px;
+}
+
+.checkout-form-container form input,
+.checkout-form-container form textarea {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.order-summary-container {
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    margin-top: 2rem;
+}
+
+.total-container {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-top: 1rem;
+    border-top: 1px dashed #ddd;
+    padding-top: 1rem;
+}
+
+.pay-button {
+    width: 100%;
+    background: linear-gradient(90deg, #8A2BE2, #A020F0);
+    color: #fff;
+    border: none;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+/* Order Confirmed Modal */
+.confirmed-modal-content {
+    text-align: center;
+}
+
+.order-placed-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-left: 5px solid var(--primary-color);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    display: none; /* Hidden by default */
+}
+
+.back-to-menu-button {
+    background: linear-gradient(90deg, #8A2BE2, #A020F0);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 2rem;
+}
+
+/* Login Modal Specific Styles */
+.login-form-container {
+    padding: 20px;
+}
+.login-form-container h3 {
+    text-align: center;
+    color: var(--primary-color);
+}
+.login-form-container input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+.login-button {
+    width: 100%;
+    padding: 12px;
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+}
+.admin-login-button {
+    background: #007bff;
+}
+.login-option {
+    text-align: center;
+    margin-top: 10px;
+}
+.logout-button {
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-left: 1rem;
+}
+/* Order Tracking Modal */
+.order-status-content {
+    text-align: center;
+}
+.tracking-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+.step.active {
+    opacity: 1;
+}
+.step-icon {
+    background-color: #ddd;
+    color: #fff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+.step.active .step-icon {
+    background-color: var(--primary-color);
+}
