@@ -1,10 +1,10 @@
 :root {
-    --primary-color: #8A2BE2; /* A vibrant purple */
-    --secondary-color: #f7f7f7;
+    --primary-color: #5d3fd3; /* A deep purple, similar to Zepto */
+    --secondary-color: #f0f3f6; /* A clean, light gray */
     --card-background: #ffffff;
-    --text-color: #333;
+    --text-color: #212121;
     --border-radius: 12px;
-    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 body {
@@ -15,95 +15,207 @@ body {
     color: var(--text-color);
 }
 
+/* NEW: Modern Header and Navigation */
 .main-header {
-    background-color: #ffffff;
+    background-color: var(--primary-color);
     box-shadow: var(--box-shadow);
-    padding: 1rem 0;
     position: sticky;
     top: 0;
     z-index: 1000;
 }
 
-.header-container {
+.top-nav-container {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 1rem 20px;
 }
 
 .logo {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--primary-color);
+    color: #ffffff;
+    margin: 0;
 }
 
-.search-bar-container {
-    flex-grow: 1;
-    margin: 0 2rem;
+.header-right-icons {
+    display: flex;
+    align-items: flex-end; /* Align to the bottom to match the screenshot */
+    gap: 2.5rem; /* Increased gap for better spacing */
+}
+
+.header-icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: #ffffff;
+    transition: color 0.2s;
     position: relative;
+    padding-top: 5px;
 }
 
-.search-bar {
-    width: 100%;
-    padding: 0.75rem 1.25rem;
-    border: 1px solid #ddd;
-    border-radius: 50px;
+.header-icon-container:hover {
+    color: #dddddd;
+}
+
+.header-icon-container span {
+    white-space: nowrap; /* Prevents text from wrapping */
+}
+
+/* Updated profile dropdown styling to match the first UI */
+#profile-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: -20px; /* Adjust as needed */
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    border-radius: var(--border-radius);
+    padding: 8px 0;
+    z-index: 1;
+    margin-top: 10px;
+}
+
+#profile-icon:hover #profile-dropdown {
+    display: block;
+}
+
+.profile-dropdown-content a {
+    color: var(--text-color);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
     font-size: 1rem;
-    outline: none;
-    transition: border-color 0.3s;
+    border-bottom: 1px solid #eee;
 }
 
-.search-bar:focus {
-    border-color: var(--primary-color);
+.profile-dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.header-icon {
+    font-size: 1.2rem;
+    margin-bottom: 4px;
 }
 
 .cart-icon-container {
     position: relative;
-    cursor: pointer;
-    background: var(--primary-color);
-    color: #ffffff;
-    padding: 0.75rem 1.5rem;
-    border-radius: 50px;
-    display: flex;
-    align-items: center;
-    font-weight: 600;
-}
-
-.cart-icon {
-    font-size: 1.2rem;
-    margin-right: 8px;
 }
 
 .cart-count {
-    font-size: 1rem;
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    background-color: #ff4d4d;
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    display: none;
 }
 
+/* NEW: Search Bar inside the header */
+.search-bar-container-main {
+    background-color: #f0f3f6;
+    padding: 10px 20px;
+}
+
+.search-bar-inner {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 12px 16px 12px 40px; /* Adjusted padding for the icon */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    background-color: #fff;
+    transition: border-color 0.3s;
+}
+
+.search-icon-inside {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+}
+
+/* UPDATED: Today's Special Banner */
 .daily-special-banner {
-    background: linear-gradient(90deg, #FF6F61, #DE4F6D);
-    color: #fff;
-    text-align: center;
+    background-color: var(--primary-color);
     padding: 1rem;
     font-weight: 700;
-    font-size: 1.2rem;
-    position: sticky;
-    top: 60px;
-    z-index: 999;
+    margin: 1.5rem auto;
+    border-radius: var(--border-radius);
+    max-width: 1200px;
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
 }
 
-.fireworks {
-    animation: firework 1.5s ease-out infinite;
-    display: inline-block;
-    margin: 0 10px;
+.banner-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+    color: white;
 }
 
-@keyframes firework {
-    0% { transform: scale(1) rotate(0deg); opacity: 1; }
-    50% { transform: scale(1.2) rotate(10deg); opacity: 0.8; }
-    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+.banner-text {
+    flex-grow: 1;
+    padding-left: 20px;
+}
+
+.banner-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.banner-message {
+    font-size: 1rem;
+    display: block;
+    max-width: 60%;
+}
+
+.banner-image-container {
+    width: 120px;
+    height: 120px;
+    margin-right: 20px;
+    border-radius: 50%; /* Changed back to circular to match the original UI */
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 3px solid #fff;
+    position: relative;
+}
+
+/* NEW: Styles for the image carousel inside the banner */
+.special-banner-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.special-banner-image.active {
+    opacity: 1;
 }
 
 .main-content {
@@ -112,22 +224,45 @@ body {
     padding: 0 20px;
 }
 
+.section-title {
+    display: none; /* Removed as per user request */
+}
+
+/* NEW: Horizontal Scroll for Tabs */
+.tabs-scroll-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 2rem;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+.tabs-scroll-container::-webkit-scrollbar {
+    display: none;
+}
 .tabs {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    padding: 1rem;
+    background-color: #ffffff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    width: max-content;
 }
 
 .tab-button {
     background-color: #ffffff;
     border: 1px solid #ddd;
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem 1rem;
     border-radius: 50px;
     cursor: pointer;
     font-size: 1rem;
     font-weight: 600;
     transition: all 0.3s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .tab-button:hover,
@@ -136,65 +271,81 @@ body {
     color: #ffffff;
     border-color: var(--primary-color);
 }
+.tab-button .fas {
+    font-size: 1.1em;
+}
 
 .food-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
 }
 
+/* NEW: Food Card Styling */
 .food-card {
     background-color: var(--card-background);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     overflow: hidden;
+    position: relative;
     display: flex;
     flex-direction: column;
-    position: relative;
-    padding-bottom: 50px; /* Add space for the sold out overlay */
+    padding-bottom: 50px;
 }
 
 .food-image {
     width: 100%;
-    height: 200px;
+    height: 120px;
     object-fit: cover;
 }
 
 .food-info {
-    padding: 1.25rem;
+    padding: 0.75rem;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 .food-details {
     display: flex;
     flex-direction: column;
+    text-align: left;
+    margin-bottom: 0.5rem;
 }
 
 .food-name {
-    font-size: 1.2rem;
+    font-size: 0.9rem;
     font-weight: 600;
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .food-price {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #555;
+    margin-top: 4px;
+    font-weight: 600;
+}
+
+.rating-and-time {
+    display: none; /* Hide the ratings */
 }
 
 .add-button {
-    background: linear-gradient(90deg, #8A2BE2, #A020F0);
+    background: var(--primary-color);
     color: #ffffff;
     border: none;
     border-radius: 50px;
-    padding: 0.75rem 1.5rem;
+    padding: 0.5rem 1rem;
     cursor: pointer;
     font-weight: 600;
     transition: transform 0.2s;
-    position: absolute; /* Position the button */
-    bottom: 1.25rem;
-    right: 1.25rem;
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    font-size: 0.9rem;
 }
 
 .add-button:hover {
@@ -225,15 +376,12 @@ body {
 .checkout-bar {
     position: fixed;
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
     width: 100%;
-    max-width: 1200px;
-    background: linear-gradient(90deg, #8A2BE2, #A020F0);
+    background: var(--primary-color);
     color: #ffffff;
     padding: 1rem;
-    border-radius: 12px 12px 0 0;
-    display: none; /* Hidden by default */
+    display: none;
     justify-content: center;
     align-items: center;
     font-size: 1.1rem;
@@ -242,9 +390,10 @@ body {
     z-index: 999;
 }
 
+/* Rest of the styles are unchanged and can be appended below */
 /* Modals */
 .modal {
-    display: none; /* Hidden by default */
+    display: none;
     position: fixed;
     z-index: 1001;
     left: 0;
@@ -287,7 +436,7 @@ body {
     max-height: 400px;
     overflow-y: auto;
 }
-/* Reverted cart item style to original */
+
 .cart-item {
     display: flex;
     justify-content: space-between;
@@ -307,7 +456,7 @@ body {
 .cart-item-price {
     font-weight: 400;
 }
-/* This is the CSS for the plus/minus buttons */
+
 .cart-item-actions {
     display: flex;
     align-items: center;
@@ -355,7 +504,8 @@ body {
 }
 
 .checkout-form-container form input,
-.checkout-form-container form textarea {
+.checkout-form-container form textarea,
+#profile-form input {
     width: 100%;
     padding: 0.75rem;
     margin-bottom: 1rem;
@@ -363,6 +513,12 @@ body {
     border-radius: 8px;
     font-family: inherit;
     font-size: 1rem;
+}
+
+#profile-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
 }
 
 .order-summary-container {
@@ -384,7 +540,7 @@ body {
 
 .pay-button {
     width: 100%;
-    background: linear-gradient(90deg, #8A2BE2, #A020F0);
+    background: var(--primary-color);
     color: #fff;
     border: none;
     padding: 1rem;
@@ -410,11 +566,11 @@ body {
     padding: 1rem;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    display: none; /* Hidden by default */
+    display: none;
 }
 
 .back-to-menu-button {
-    background: linear-gradient(90deg, #8A2BE2, #A020F0);
+    background: var(--primary-color);
     color: #fff;
     border: none;
     padding: 0.75rem 1.5rem;
@@ -467,6 +623,7 @@ body {
     font-weight: 600;
     margin-left: 1rem;
 }
+
 /* Order Tracking Modal */
 .order-status-content {
     text-align: center;
@@ -499,4 +656,181 @@ body {
 }
 .step.active .step-icon {
     background-color: var(--primary-color);
+}
+
+/* Receipt Modal */
+.receipt-item {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--primary-color);
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.receipt-item-info h4 {
+    margin: 0 0 5px;
+    font-weight: 600;
+}
+
+.receipt-item-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.receipt-item .receipt-total {
+    font-weight: 700;
+    color: var(--text-color);
+    margin-top: 10px;
+    display: block;
+}
+
+.receipt-item .view-receipt-button {
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.receipt-pop-up {
+    max-width: 350px;
+    margin: 5% auto;
+    background: #fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><path d="M0 0 H100% V100% Q50% 90% 0 100% Z" fill="#fff"/></svg>') bottom left / 100% 20px no-repeat;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), 50% 100%, 0 calc(100% - 20px));
+}
+
+.receipt-content {
+    font-family: monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    padding: 10px;
+    color: #333;
+}
+
+.receipt-content h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.receipt-content hr {
+    border: 1px dashed #ddd;
+    margin: 10px 0;
+}
+
+.receipt-content .receipt-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.receipt-content .receipt-total {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* Added for readonly inputs */
+input[readonly] {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    color: #888;
+}
+
+/* NEW: Admin Dashboard Layout */
+.admin-orders-container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap; /* Allows sections to wrap on smaller screens */
+}
+.order-list-section {
+    flex: 1; /* Makes sections expand to fill available space */
+    min-width: 300px; /* Ensures sections don't get too small */
+}
+
+/* NEW: Styles for the bill modal */
+#bill-modal.modal {
+    display: none;
+    position: fixed;
+    z-index: 1002; /* Higher z-index to be on top of other modals */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+#bill-modal .modal-content {
+    margin: 5% auto;
+    max-width: 350px;
+    text-align: center;
+}
+#bill-modal .modal-header {
+    border-bottom: none;
+    justify-content: center;
+}
+#bill-modal .receipt-content {
+    font-size: 1rem;
+    text-align: left;
+}
+#bill-modal .back-to-menu-button {
+    font-size: 1rem;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+}
+
+/* NEW: Styles for the item counter */
+.food-card .add-button {
+    /* Existing style for the add button */
+    display: block; /* Initially show the add button */
+}
+
+.food-card .quantity-selector {
+    display: none; /* Initially hide the quantity selector */
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.quantity-selector button {
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.quantity-selector button:hover {
+    background-color: var(--secondary-color);
+}
+
+.quantity-selector .item-quantity {
+    font-weight: 600;
+    width: 20px;
+    text-align: center;
+}
+
+/* Additional styling for the exploration categories */
+.explore-categories-grid {
+    display: none; /* Hide this section completely */
 }
