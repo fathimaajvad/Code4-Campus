@@ -2,7 +2,7 @@
 // Please replace your entire current script.js content with this code.
 
 // Global cart object
-let cart = {}; 
+let cart = {};
 
 // Function to save the cart to the server
 async function saveCartToServer() {
@@ -10,7 +10,7 @@ async function saveCartToServer() {
   if (!userId) return; // Don't save if the user isn't logged in
 
   try {
-    const response = await fetch('http://localhost:5000/api/save-cart', {
+    const response = await fetch(`${process.env.API_URL}/api/save-cart`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, cart: cart })
@@ -29,11 +29,11 @@ async function loadCartFromServer() {
   if (!userId) {
     // If not logged in, clear cart to start fresh
     cart = {};
-    return; 
+    return;
   }
 
   try {
-    const response = await fetch(`http://localhost:5000/api/load-cart/${userId}`);
+    const response = await fetch(`${process.env.API_URL}/api/load-cart/${userId}`);
     if (response.ok) {
       const serverCart = await response.json();
       if (serverCart && Object.keys(serverCart).length > 0) {
@@ -203,18 +203,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function initializePage() {
         try {
-            const response = await fetch('http://localhost:5000/api/food-items');
+            const response = await fetch(`${process.env.API_URL}/api/food-items`);
             allFoodItems = await response.json();
             
             if (allFoodItems.length === 0) {
                 for (const item of staticFoodItems) {
-                    await fetch('http://localhost:5000/api/add-item', {
+                    await fetch(`${process.env.API_URL}/api/add-item`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(item),
                     });
                 }
-                const newResponse = await fetch('http://localhost:5000/api/food-items');
+                const newResponse = await fetch(`${process.env.API_URL}/api/food-items`);
                 allFoodItems = await newResponse.json();
             }
             
@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         let filteredItems = category === 'All' ? allFoodItems : allFoodItems.filter(item => item.category === category);
         
         if (searchTerm) {
-            filteredItems = filteredItems.filter(item => 
+            filteredItems = filteredItems.filter(item =>
                 item.name.toLowerCase().includes(searchTerm.toLowerCase())
             );
         }
@@ -444,7 +444,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
         if (orderReadyCheckInterval) clearInterval(orderReadyCheckInterval);
-        isReadyPopupShown = false; 
+        isReadyPopupShown = false;
 
         orderReadyCheckInterval = setInterval(async () => {
             if (isReadyPopupShown) {
@@ -452,7 +452,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
             try {
-                const response = await fetch(`http://localhost:5000/api/user-active-orders/${userId}`);
+                const response = await fetch(`${process.env.API_URL}/api/user-active-orders/${userId}`);
                 const order = await response.json();
                 
                 if (order && order.status === 'Ready' && !isReadyPopupShown) {
@@ -495,7 +495,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         };
         
-        const initialResponse = await fetch(`http://localhost:5000/api/order-status/${customOrderId}`);
+        const initialResponse = await fetch(`${process.env.API_URL}/api/order-status/${customOrderId}`);
         const initialOrder = await initialResponse.json();
         if (initialOrder && initialOrder.status) {
             trackOrderTokenElement.textContent = initialOrder.tokenNumber;
@@ -504,7 +504,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         orderTrackingInterval = setInterval(async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/order-status/${customOrderId}`);
+                const response = await fetch(`${process.env.API_URL}/api/order-status/${customOrderId}`);
                 const order = await response.json();
                 if (order && order.status) {
                     updateUI(order.status);
@@ -528,7 +528,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
         try {
-            const response = await fetch(`http://localhost:5000/api/user-active-orders/${userId}`);
+            const response = await fetch(`${process.env.API_URL}/api/user-active-orders/${userId}`);
             const activeOrder = await response.json();
             
             if (activeOrder && activeOrder.customOrderId) {
@@ -555,7 +555,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         try {
-            const response = await fetch(`http://localhost:5000/api/user-orders/${userId}`);
+            const response = await fetch(`${process.env.API_URL}/api/user-orders/${userId}`);
             const orders = await response.json();
             
             receiptsList.innerHTML = '';
@@ -615,7 +615,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
         try {
-            const response = await fetch(`http://localhost:5000/api/user/${userId}`);
+            const response = await fetch(`${process.env.API_URL}/api/user/${userId}`);
             const user = await response.json();
             if (response.ok) {
                 currentUserData = user;
@@ -638,7 +638,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     userLoginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const phoneNumber = document.getElementById('user-phone').value;
-        const response = await fetch('http://localhost:5000/api/login', {
+        const response = await fetch(`${process.env.API_URL}/api/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phoneNumber })
@@ -678,7 +678,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         e.preventDefault();
         const username = document.getElementById('admin-username').value;
         const password = document.getElementById('admin-password').value;
-        const response = await fetch('http://localhost:5000/api/login', {
+        const response = await fetch(`${process.env.API_URL}/api/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
@@ -696,7 +696,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         forgotPasswordLink.addEventListener('click', async (e) => {
             e.preventDefault();
             try {
-                const response = await fetch('http://localhost:5000/api/admin/forgot-password', {
+                const response = await fetch(`${process.env.API_URL}/api/admin/forgot-password`, {
                     method: 'POST',
                 });
                 const result = await response.json();
@@ -739,7 +739,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
 
         try {
-            const signupResponse = await fetch('http://localhost:5000/api/signup', {
+            const signupResponse = await fetch(`${process.env.API_URL}/api/signup`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newUser)
@@ -796,7 +796,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             email: document.getElementById('profile-email').value,
         };
         try {
-            const response = await fetch(`http://localhost:5000/api/user/${userId}`, {
+            const response = await fetch(`${process.env.API_URL}/api/user/${userId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updatedUser)
@@ -886,7 +886,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (viewButton) {
             const orderId = viewButton.dataset.orderId;
             try {
-                const response = await fetch(`http://localhost:5000/api/order/${orderId}`);
+                const response = await fetch(`${process.env.API_URL}/api/order/${orderId}`);
                 const order = await response.json();
                 if (order) {
                     showReceiptPopUp(order);
@@ -917,7 +917,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (modal.id === 'order-ready-modal' && currentTrackableOrderId) {
                 try {
-                    const response = await fetch(`http://localhost:5000/api/admin/update-order-status/${currentTrackableOrderId}`, {
+                    const response = await fetch(`${process.env.API_URL}/api/admin/update-order-status/${currentTrackableOrderId}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ status: 'Completed' }),
@@ -991,7 +991,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const amountInPaise = totalAmount * 100;
 
             try {
-                const backendResponse = await fetch('http://localhost:5000/api/create-order', {
+                const backendResponse = await fetch(`${process.env.API_URL}/api/create-order`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -1219,7 +1219,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         async function fetchAndRenderOrders() {
             try {
-                const response = await fetch('http://localhost:5000/api/orders');
+                const response = await fetch(`${process.env.API_URL}/api/orders`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -1284,7 +1284,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const orderId = e.target.dataset.id;
                     const newStatus = e.target.dataset.status;
 
-                    await fetch(`http://localhost:5000/api/admin/update-order-status/${orderId}`, {
+                    await fetch(`${process.env.API_URL}/api/admin/update-order-status/${orderId}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ status: newStatus }),
@@ -1320,7 +1320,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             try {
-                const response = await fetch('http://localhost:5000/api/admin/scan-qr', {
+                const response = await fetch(`${process.env.API_URL}/api/admin/scan-qr`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ qrCodeToken })
@@ -1390,7 +1390,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         async function fetchAndRenderItems() {
             try {
-                const response = await fetch('http://localhost:5000/api/food-items');
+                const response = await fetch(`${process.env.API_URL}/api/food-items`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -1438,7 +1438,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     image: document.getElementById('image').value,
                     category: document.getElementById('category').value,
                 };
-                await fetch('http://localhost:5000/api/add-item', {
+                await fetch(`${process.env.API_URL}/api/add-item`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(newItem),
@@ -1453,10 +1453,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const itemId = e.target.dataset.id;
                 if (!itemId) return;
                 if (e.target.classList.contains('delete-button')) {
-                    await fetch(`http://localhost:5000/api/delete-item/${itemId}`, { method: 'DELETE' });
+                    await fetch(`${process.env.API_URL}/api/delete-item/${itemId}`, { method: 'DELETE' });
                 } else if (e.target.classList.contains('sold-out-button')) {
                     const isSoldOut = e.target.classList.contains('active');
-                    await fetch(`http://localhost:5000/api/update-item/${itemId}`, {
+                    await fetch(`${process.env.API_URL}/api/update-item/${itemId}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ isSoldOut: !isSoldOut })
@@ -1464,9 +1464,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 } else if (e.target.classList.contains('special-button')) {
                     const isSpecial = e.target.classList.contains('active');
                     if (isSpecial) {
-                        await fetch(`http://localhost:5000/api/unset-daily-special/${itemId}`, { method: 'PUT' });
+                        await fetch(`${process.env.API_URL}/api/unset-daily-special/${itemId}`, { method: 'PUT' });
                     } else {
-                        await fetch(`http://localhost:5000/api/set-daily-special/${itemId}`, { method: 'PUT' });
+                        await fetch(`${process.env.API_URL}/api/set-daily-special/${itemId}`, { method: 'PUT' });
                     }
                 }
                 fetchAndRenderItems();
