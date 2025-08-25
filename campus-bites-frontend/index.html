@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campus Bites</title>
@@ -22,6 +23,7 @@
                     <input type="tel" id="user-phone" placeholder="Enter your phone number" required>
                     <button type="submit" class="login-button">Login as User</button>
                     <p class="login-option">Are you an admin? <a href="#" id="show-admin-login">Click here</a></p>
+                    <p class="login-option">New to Campus Bites? <a href="#" id="show-signup">Sign up now</a></p>
                 </form>
                 <form id="admin-login-form" style="display: none;">
                     <h3>Admin Login</h3>
@@ -29,39 +31,113 @@
                     <input type="password" id="admin-password" placeholder="Password" required>
                     <button type="submit" class="login-button admin-login-button">Login as Admin</button>
                     <p class="login-option">Are you a user? <a href="#" id="show-user-login">Click here</a></p>
+                    <p class="login-option"><a href="#" id="forgot-password-link">Forgot password?</a></p>
                 </form>
             </div>
         </div>
     </div>
     
-    <header class="main-header">
-        <div class="header-container">
-            <h1 class="logo">Campus Bites</h1>
-            <div class="search-bar-container">
-                <input type="text" class="search-bar" placeholder="Search for samosa, chai, dosa...">
-                <i class="fas fa-search search-icon"></i>
+    <div id="signup-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Sign Up for Campus Bites! </h2>
+                <span class="close-button">&times;</span>
             </div>
-            <div class="cart-icon-container">
-                <i class="fas fa-shopping-cart cart-icon"></i>
-                <span class="cart-count">0</span>
+            <div class="login-form-container">
+                <form id="signup-form">
+                    <input type="text" id="signup-first-name" placeholder="First Name" required>
+                    <input type="text" id="signup-last-name" placeholder="Last Name" required>
+                    <input type="text" id="signup-department" placeholder="Department (e.g., CSE)" required>
+                    <input type="text" id="signup-id" placeholder="Student ID (e.g., 23BCT...)" required>
+                    <input type="email" id="signup-email" placeholder="Email" required>
+                    <input type="tel" id="signup-phone" placeholder="Phone Number" required>
+                    <button type="submit" class="login-button">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="top-nav-container">
+            <h1 class="logo">Campus Bites</h1>
+            <div class="header-right-icons">
+                <div id="track-order-icon" class="header-icon-container" style="display: none;">
+                    <i class="fas fa-shipping-fast header-icon"></i>
+                    <span>Track Order</span>
+                </div>
+                <div id="receipt-icon" class="header-icon-container" style="display: none;">
+                    <i class="fas fa-receipt header-icon"></i>
+                    <span>Receipts</span>
+                </div>
+                <div id="profile-icon" class="header-icon-container" style="display: none;">
+                    <i class="fas fa-user header-icon"></i>
+                    <span>Profile</span>
+                    <div id="profile-dropdown" class="profile-dropdown-content">
+                        <a href="#" id="my-profile-link">My Profile</a>
+                        <a href="#" id="logout-link">Logout</a>
+                    </div>
+                </div>
+                <div class="cart-icon-container">
+                    <i class="fas fa-shopping-cart header-icon"></i>
+                    <span class="cart-count">0</span>
+                    <span>Cart</span>
+                </div>
+            </div>
+        </div>
+        <div class="search-bar-container-main">
+            <div class="search-bar-inner">
+                <i class="fas fa-search search-icon-inside"></i>
+                <input type="text" class="search-bar" placeholder="Craving something? Search here!">
             </div>
         </div>
     </header>
 
-    <div id="daily-special-banner" class="daily-special-banner" style="display: none;">
-        <span class="fireworks">🎇</span>
-        <span id="daily-special-text"></span>
-        <span class="fireworks">🎇</span>
-    </div>
-
     <main class="main-content">
         <div class="container">
-            <div class="tabs">
-                <button class="tab-button active">All</button>
-                <button class="tab-button">Popular</button>
-                <button class="tab-button">Snacks</button>
-                <button class="tab-button">South Indian</button>
-                <button class="tab-button">Beverages</button>
+            <div id="daily-special-banner" class="daily-special-banner">
+                <div class="banner-content">
+                    <div class="banner-text">
+                        <span class="banner-title">Today's Special</span>
+                        <span id="daily-special-text" class="banner-message"></span>
+                    </div>
+                    <div class="banner-image-container">
+                        </div>
+                </div>
+            </div>
+            
+            <div class="tabs-scroll-container">
+                <div class="tabs">
+                    <button class="tab-button active" data-category="All">
+                        <i class="fas fa-utensils"></i> All
+                    </button>
+                    <button class="tab-button" data-category="Snacks">
+                        <i class="fas fa-cookie-bite"></i> Snacks
+                    </button>
+                    <button class="tab-button" data-category="Cold Beverages">
+                        <i class="fas fa-beer"></i> Cold Beverages
+                    </button>
+                    <button class="tab-button" data-category="Beverages">
+                        <i class="fas fa-coffee"></i> Beverages
+                    </button>
+                    <button class="tab-button" data-category="Meals">
+                        <i class="fas fa-utensils"></i> Meals
+                    </button>
+                    <button class="tab-button" data-category="Juice">
+                        <i class="fas fa-glass-citrus"></i> Juice
+                    </button>
+                    <button class="tab-button" data-category="Fresh Juice">
+                        <i class="fas fa-leaf"></i> Fresh Juice
+                    </button>
+                    <button class="tab-button" data-category="Shake">
+                        <i class="fas fa-blender"></i> Shake
+                    </button>
+                    <button class="tab-button" data-category="Staples">
+                        <i class="fas fa-bread-slice"></i> Staples
+                    </button>
+                    <button class="tab-button" data-category="Curries">
+                        <i class="fas fa-concierge-bell"></i> Curries
+                    </button>
+                </div>
             </div>
             
             <div class="food-grid" id="food-grid">
@@ -70,7 +146,7 @@
     </main>
 
     <div id="checkout-bar" class="checkout-bar">
-        <span id="checkout-text">Checkout - 1 item • ₹ 50</span>
+        <span id="checkout-text">Checkout - 0 items • ₹ 0</span>
     </div>
 
     <div id="cart-modal" class="modal">
@@ -101,10 +177,10 @@
             <div class="checkout-form-container">
                 <form id="checkout-form">
                     <p>Complete your details and pick up from the canteen counter.</p>
-                    <input type="text" placeholder="Your name" required>
-                    <input type="text" placeholder="Roll number" required>
-                    <input type="text" placeholder="Preferred pickup time (e.g. 1:15 PM)">
-                    <textarea placeholder="Any notes (no onions, extra chutney, etc.)"></textarea>
+                    <input type="text" id="user-name" placeholder="Your name" readonly>
+                    <input type="text" id="roll-number" placeholder="Roll number" readonly>
+                    <input type="text" id="pickup-time" placeholder="Preferred pickup time (e.g. 1:15 PM)">
+                    <textarea id="extra-suggestions" placeholder="Any notes (no onions, extra chutney, etc.)"></textarea>
                     
                     <div class="order-summary-container">
                         <h3>Order Summary</h3>
@@ -112,11 +188,11 @@
                         </div>
                         <div class="total-container">
                             <span>Total</span>
-                            <span id="total-price">₹ 50</span>
+                            <span id="total-price">₹ 0</span>
                         </div>
                     </div>
 
-                    <button type="button" id="pay-and-place-order" class="pay-button">Pay & Place Order (<span id="pay-button-amount">₹ 50</span>)</button>
+                    <button type="button" id="pay-and-place-order" class="pay-button">Pay & Place Order (<span id="pay-button-amount">₹ 0</span>)</button>
                 </form>
             </div>
         </div>
@@ -125,15 +201,21 @@
     <div id="order-confirmed-page-modal" class="modal">
         <div class="modal-content confirmed-modal-content">
             <h2>Order Confirmed</h2>
-            <p id="confirmation-message">Thanks Fathima P Ajvad, your order OGC8QC is received. Please head to the canteen pickup counter.</p>
+            <p id="confirmation-message"></p>
+            <div id="qr-code-container-confirm" style="margin-top: 20px; display: flex; justify-content: center;"></div>
             <button class="back-to-menu-button">Back to Menu</button>
-            <div class="order-placed-notification">
-                <p>Order placed!</p>
-                <p id="notification-message">Thanks Fathima P Ajvad. Your order OGC8QC is being prepared.</p>
-            </div>
         </div>
     </div>
     
+    <div id="order-ready-modal" class="modal">
+        <div class="modal-content confirmed-modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Order Ready! 🎉</h2>
+            <p id="order-ready-message"></p>
+            <button class="back-to-menu-button">Great, thanks!</button>
+        </div>
+    </div>
+
     <div id="order-tracking-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -141,7 +223,7 @@
                 <span class="close-button">&times;</span>
             </div>
             <div class="order-status-content">
-                <p>Order ID: <span id="track-order-id"></span></p>
+                <p>Order ID: <span id="track-order-id"></span> | Token: <span id="track-order-token"></span></p>
                 <div class="tracking-steps">
                     <div class="step active" id="step-1">
                         <span class="step-icon">1</span>
@@ -159,7 +241,68 @@
             </div>
         </div>
     </div>
+    
+    <div id="receipt-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Your Receipts</h2>
+                <span class="close-button">&times;</span>
+            </div>
+            <div id="receipts-list">
+                <p>No past orders found.</p>
+            </div>
+        </div>
+    </div>
 
+    <div id="single-receipt-modal" class="modal">
+        <div class="modal-content receipt-pop-up">
+            <div class="modal-header">
+                <h2>Receipt</h2>
+                <span class="close-button">&times;</span>
+            </div>
+            <div id="receipt-pop-up-content" class="receipt-content">
+            </div>
+        </div>
+    </div>
+    
+    <div id="qr-modal" class="modal">
+        <div class="modal-content confirmed-modal-content">
+            <div class="modal-header">
+                <h2>Scan QR Code</h2>
+                <span class="close-button">&times;</span>
+            </div>
+            <p>Please show this QR code to the canteen staff.</p>
+            <div id="receipt-qr-code-container" style="margin-top: 20px; display: flex; justify-content: center;"></div>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <button class="back-to-menu-button">Great, thanks!</button>
+        </div>
+    </div>
+
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>My Profile</h2>
+                <span class="close-button">&times;</span>
+            </div>
+            <form id="profile-form">
+                <label for="profile-first-name">First Name:</label>
+                <input type="text" id="profile-first-name" required>
+                <label for="profile-last-name">Last Name:</label>
+                <input type="text" id="profile-last-name" required>
+                <label for="profile-department">Department:</label>
+                <input type="text" id="profile-department" required>
+                <label for="profile-id">Student ID:</label>
+                <input type="text" id="profile-id" required>
+                <label for="profile-email">Email:</label>
+                <input type="email" id="profile-email" required>
+                <label for="profile-phone">Phone Number:</label>
+                <input type="tel" id="profile-phone" required readonly>
+                <button type="submit" class="login-button">Save Changes</button>
+            </form>
+        </div>
+    </div>
+    
     <script src="script.js"></script>
 </body>
 </html>
